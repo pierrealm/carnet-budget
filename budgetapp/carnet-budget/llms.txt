@@ -1,0 +1,26 @@
+# Carnet
+
+> Carnet est une application web gratuite de budget personnel, en français, pensée pour le téléphone. On fixe un budget du mois réparti par catégories, on note chaque dépense en une phrase (« 12€ boulangerie », « 45 essence hier ») et on suit son solde jour par jour. Sans compte, sans cookie, sans publicité : les données restent dans le navigateur de l'utilisateur.
+
+Public : particuliers qui veulent suivre leurs dépenses du mois simplement (étudiants, jeunes actifs).
+Prix : gratuit.
+Langue : français.
+Carnet ne donne pas de conseil financier ; ses messages humoristiques ne sont pas des recommandations.
+
+## Pages principales
+
+- [Accueil](https://carnet-budget.vercel.app/) : présentation, fonctions, questions fréquentes
+- [Application](https://carnet-budget.vercel.app/app.html) : l'appli elle-même (nécessite JavaScript)
+
+## Fonctions
+
+- Prévisions : budget principal du mois (ex. 350 €) réparti entre catégories, dépenses récurrentes (abonnements) ajoutées automatiquement chaque mois
+- Saisie rapide : la dépense est écrite en langage courant, classée automatiquement, avec une réponse du type « Tu es à 90 € / 150 € dans Transports ce mois-ci »
+- Journal : calendrier du mois avec le total par jour, détail des dépenses et solde restant
+- Données : export JSON et effacement complet depuis l'appli
+
+## Informations légales
+
+- [Mentions légales](https://carnet-budget.vercel.app/mentions-legales.html)
+- [Politique de confidentialité](https://carnet-budget.vercel.app/confidentialite.html)
+- [Conditions d'utilisation](https://carnet-budget.vercel.app/cgu.html)

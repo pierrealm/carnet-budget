@@ -1,0 +1,9 @@
+/*
+  Polices auto-hébergées : aucune requête vers Google ou un autre service tiers.
+  Dépose les fichiers .woff2 dans assets/fonts/ (voir CONFORMITE.md, « À faire par un humain »).
+  Tant qu'ils sont absents, le navigateur utilise la police arrondie du système
+  (SF Rounded sur iPhone/Mac, sinon la police système) : l'appli reste lisible.
+  Licence des deux polices : SIL Open Font License 1.1 (usage et auto-hébergement autorisés).
+*/
+@font-face{font-family:"Nunito";font-style:normal;font-weight:400 900;font-display:swap;src:url("fonts/nunito-latin-variable.woff2") format("woff2")}
+@font-face{font-family:"Fredoka";font-style:normal;font-weight:300 700;font-display:swap;src:url("fonts/fredoka-latin-variable.woff2") format("woff2")}

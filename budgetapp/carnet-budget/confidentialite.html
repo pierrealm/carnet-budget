@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Politique de confidentialité · Carnet</title>
+<meta name="description" content="Quelles données Carnet traite, pourquoi, combien de temps, et comment exercer tes droits.">
+<link rel="canonical" href="https://carnet-budget.vercel.app/confidentialite.html">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Carnet</a>
+    <a class="cta" href="app.html">Ouvrir l'appli</a>
+  </div>
+</header>
+
+<main id="contenu" class="wrap">
+  <h1>Politique de confidentialité</h1>
+  <p>Dernière mise à jour : 1<sup>er</sup> octobre 2026</p>
+
+  <h2>En bref</h2>
+  <ul>
+    <li>Tes dépenses, budgets et catégories sont enregistrés <strong>dans ton navigateur, sur ton appareil</strong>. Je ne les reçois pas.</li>
+    <li>Carnet n'utilise <strong>aucun cookie</strong>, aucune mesure d'audience, aucune publicité et aucun service tiers dans la page.</li>
+    <li>Comme pour tout site, l'hébergeur enregistre des journaux techniques (adresse IP notamment) pour faire fonctionner le site et le protéger.</li>
+  </ul>
+
+  <h2>Qui est responsable</h2>
+  <p>Le responsable du traitement est l'éditeur de Carnet, particulier agissant à titre non professionnel (voir les <a href="mentions-legales.html">mentions légales</a>). Pour toute question ou pour exercer tes droits : <a href="mailto:macroapp@outlook.fr">macroapp@outlook.fr</a>.</p>
+
+  <h2>Les traitements, un par un</h2>
+
+  <h3>1. Tes données de budget (dans ton navigateur)</h3>
+  <div class="table-wrap"><table>
+    <tr><th scope="row">Données</th><td>Montants et libellés des dépenses, dates, catégories et mots-clés, budget principal et budgets par catégorie, dépenses récurrentes, messages échangés dans l'onglet Saisie, dernier onglet ouvert.</td></tr>
+    <tr><th scope="row">But</th><td>Faire fonctionner l'appli : calculer tes totaux, ton solde et afficher ton journal.</td></tr>
+    <tr><th scope="row">Où</th><td>Uniquement dans le stockage local (<code>localStorage</code>) de ton navigateur. L'analyse de tes phrases (« 12€ boulangerie ») se fait sur ton appareil, sans envoi à un serveur ni à une IA.</td></tr>
+    <tr><th scope="row">Qui y a accès</th><td>Toi, et toute personne qui utilise le même navigateur sur le même appareil. Ni l'éditeur ni l'hébergeur n'y ont accès.</td></tr>
+    <tr><th scope="row">Durée</th><td>Jusqu'à ce que tu les effaces : bouton « Effacer toutes mes données » dans l'onglet Prévisions, ou suppression des données du site dans les réglages de ton navigateur.</td></tr>
+  </table></div>
+
+  <h3>2. Journaux techniques de l'hébergeur</h3>
+  <div class="table-wrap"><table>
+    <tr><th scope="row">Données</th><td>Adresse IP, date et heure, page demandée, type de navigateur et d'appareil, localisation approximative déduite de l'IP (ville ou pays).</td></tr>
+    <tr><th scope="row">But</th><td>Livrer les pages, assurer la sécurité du site et diagnostiquer les pannes.</td></tr>
+    <tr><th scope="row">Base légale</th><td>Intérêt légitime (article 6.1.f du RGPD) : un site ne peut pas fonctionner ni être protégé sans ces journaux.</td></tr>
+    <tr><th scope="row">Destinataire</th><td>L'hébergeur, en tant que sous-traitant : Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis.</td></tr>
+    <tr><th scope="row">Sortie de l'UE</th><td>Oui, vers les États-Unis. Garantie : l'hébergeur est certifié au cadre de protection des données UE–États-Unis (Data Privacy Framework), reconnu par la décision d'adéquation de la Commission européenne du 10 juillet 2023.</td></tr>
+    <tr><th scope="row">Durée</th><td>L’éditeur peut consulter ces journaux pendant 1 heure (offre gratuite « Hobby » de Vercel). Vercel peut conserver ses propres journaux plus longtemps, selon sa politique de confidentialité.</td></tr>
+  </table></div>
+
+  <h3>3. Messages que tu m'envoies par email</h3>
+  <div class="table-wrap"><table>
+    <tr><th scope="row">Données</th><td>Ton adresse email et le contenu de ton message.</td></tr>
+    <tr><th scope="row">But</th><td>Te répondre et traiter ta demande (question, exercice de tes droits).</td></tr>
+    <tr><th scope="row">Base légale</th><td>Intérêt légitime à répondre aux messages reçus ; obligation légale quand il s'agit d'une demande d'exercice de droits RGPD.</td></tr>
+    <tr><th scope="row">Destinataire</th><td>L'éditeur et son fournisseur de messagerie : Microsoft (Outlook.com).</td></tr>
+    <tr><th scope="row">Durée</th><td>Le temps de traiter la demande, puis 1 an.</td></tr>
+  </table></div>
+
+  <!-- ============================================================
+       SECTION À PUBLIER LE JOUR OÙ LES COMPTES SUPABASE SERONT EN LIGNE.
+       Tant que les comptes n'existent pas dans le code, laisse-la commentée :
+       une politique doit décrire ce que le site fait vraiment.
+  ============================================================
+  <h3>4. Ton compte Carnet</h3>
+  <div class="table-wrap"><table>
+    <tr><th scope="row">Données</th><td>Adresse email, mot de passe (stocké uniquement sous forme chiffrée irréversible par Supabase Auth, jamais lisible par l'éditeur), dates de création et de dernière connexion, et tes données de budget synchronisées (les mêmes qu'au point 1).</td></tr>
+    <tr><th scope="row">But</th><td>Te permettre de te connecter et de retrouver ton budget sur tous tes appareils.</td></tr>
+    <tr><th scope="row">Base légale</th><td>Exécution du contrat (article 6.1.b du RGPD) : les conditions d'utilisation que tu acceptes à l'inscription.</td></tr>
+    <tr><th scope="row">Destinataires</th><td>L'éditeur (administration technique uniquement) et Supabase, Inc., sous-traitant pour la base de données et l'authentification, dont l'infrastructure repose sur Amazon Web Services.</td></tr>
+    <tr><th scope="row">Localisation</th><td>Base de données hébergée dans l'Union européenne, région <span class="todo">[RÉGION SUPABASE À COMPLÉTER, ex. Paris ou Francfort]</span>. Supabase étant une société américaine, un accès depuis les États-Unis reste possible : <span class="todo">[GARANTIE À VÉRIFIER dans le DPA Supabase : certification Data Privacy Framework et/ou clauses contractuelles types]</span>.</td></tr>
+    <tr><th scope="row">Emails envoyés</th><td>Emails de confirmation et de réinitialisation du mot de passe, envoyés via <span class="todo">[SERVICE D'ENVOI À COMPLÉTER]</span>. Aucun email promotionnel.</td></tr>
+    <tr><th scope="row">Durée</th><td>Tant que ton compte existe. Quand tu supprimes ton compte, toutes ses données sont effacées sous 30 jours. Un compte inactif pendant 3 ans est supprimé, après un email de prévenance.</td></tr>
+  </table></div>
+  ============================================================ -->
+
+  <h2>Ce que Carnet ne fait pas</h2>
+  <ul>
+    <li>Pas de revente ni de partage de données à des fins commerciales.</li>
+    <li>Pas de publicité, pas de profilage, pas de mesure d'audience.</li>
+    <li>Pas de décision automatisée te concernant. Le classement automatique d'une dépense dans une catégorie se fait sur ton appareil et tu peux le modifier.</li>
+  </ul>
+
+  <h2 id="cookies">Cookies et stockage local</h2>
+  <p>Carnet ne dépose <strong>aucun cookie</strong>. Il utilise le stockage local de ton navigateur, uniquement pour faire fonctionner l'appli que tu utilises :</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th scope="col">Nom</th><th scope="col">Émetteur</th><th scope="col">Finalité</th><th scope="col">Durée</th></tr></thead>
+    <tbody>
+      <tr><td><code>carnet-budget-v1</code></td><td>Carnet (ce site)</td><td>Enregistrer tes budgets, catégories, dépenses et messages</td><td>Jusqu'à ce que tu l'effaces</td></tr>
+      <tr><td><code>carnet-budget-v1-tab</code></td><td>Carnet (ce site)</td><td>Rouvrir l'appli sur le dernier onglet utilisé</td><td>Jusqu'à ce que tu l'effaces</td></tr>
+    </tbody>
+  </table></div>
+  <p>Ce stockage est strictement nécessaire au service que tu demandes. Il est donc dispensé de consentement (article 82 de la loi Informatique et Libertés), et c'est pourquoi Carnet n'affiche pas de bandeau cookies. Les polices sont servies par le site lui-même : aucune requête ne part vers Google ou un autre service. Si un outil de mesure d'audience ou un autre traceur était ajouté un jour, un bandeau de consentement serait mis en place avant.</p>
+
+  <h2>Tes droits</h2>
+  <p>Tu disposes des droits d'accès, de rectification, d'effacement, d'opposition, de limitation et de portabilité sur tes données (articles 15 à 21 du RGPD), ainsi que du droit de définir des directives sur leur sort après ton décès.</p>
+  <ul>
+    <li><strong>Données de budget :</strong> elles sont sur ton appareil. Tu les exportes avec « Exporter mes données (JSON) » et tu les effaces avec « Effacer toutes mes données », dans l'onglet Prévisions.</li>
+    <li><strong>Autres données :</strong> écris à <a href="mailto:macroapp@outlook.fr">macroapp@outlook.fr</a>. Réponse sous un mois au plus tard.</li>
+  </ul>
+  <p>Si tu estimes que tes droits ne sont pas respectés, tu peux saisir la CNIL : cnil.fr, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07.</p>
+
+  <h2>Âge</h2>
+  <p>Carnet s'adresse aux personnes de 15 ans et plus. En dessous, l'accord d'un parent est nécessaire.</p>
+
+  <h2>Modifications</h2>
+  <p>Cette politique sera mise à jour à chaque changement du site qui touche aux données (par exemple l'arrivée des comptes). La date en haut de page indique la dernière version.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav aria-label="Informations légales">
+      <ul>
+        <li><a href="mentions-legales.html">Mentions légales</a></li>
+        <li><a href="confidentialite.html" aria-current="page">Politique de confidentialité</a></li>
+        <li><a href="confidentialite.html#cookies">Cookies et stockage local</a></li>
+        <li><a href="cgu.html">Conditions d'utilisation</a></li>
+      </ul>
+    </nav>
+    <p>Contact : <a href="mailto:macroapp@outlook.fr">macroapp@outlook.fr</a></p>
+  </div>
+</footer>
+</body>
+</html>
