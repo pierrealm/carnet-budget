@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carnet · budget perso simple</title>
+<meta name="description" content="Carnet est une appli gratuite de budget personnel : tu fixes un budget par catégorie, tu notes tes dépenses en une phrase (« 12€ boulangerie ») et tu suis ton solde jour par jour. Les données restent sur ton appareil.">
+<link rel="canonical" href="https://carnet-budget-zeta.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Carnet">
+<meta property="og:title" content="Carnet · budget perso simple">
+<meta property="og:description" content="Budget par catégorie, dépenses notées en une phrase, journal jour par jour. Gratuit, sans pub, données sur ton appareil.">
+<meta property="og:url" content="https://carnet-budget-zeta.vercel.app/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f5f2">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Carnet",
+      "url": "https://carnet-budget-zeta.vercel.app/app.html",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Navigateur web (mobile et ordinateur)",
+      "inLanguage": "fr",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+      "description": "Appli de budget personnel : prévisions par catégorie, saisie rapide des dépenses en langage naturel, journal quotidien et dépenses récurrentes. Les données sont stockées sur l'appareil de l'utilisateur."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Carnet est-il gratuit ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui. Carnet est gratuit, sans publicité et sans abonnement." } },
+        { "@type": "Question", "name": "Où sont stockées mes dépenses ?", "acceptedAnswer": { "@type": "Answer", "text": "Dans le navigateur de ton appareil uniquement. L'éditeur ne les reçoit pas. Tu peux les exporter ou les effacer depuis l'onglet Prévisions." } },
+        { "@type": "Question", "name": "Comment ajouter une dépense ?", "acceptedAnswer": { "@type": "Answer", "text": "Dans l'onglet Saisie, écris le montant et un mot, par exemple « 12€ boulangerie » ou « 45 essence hier ». Carnet choisit la catégorie et affiche où tu en es." } },
+        { "@type": "Question", "name": "Carnet donne-t-il des conseils financiers ?", "acceptedAnswer": { "@type": "Answer", "text": "Non. Carnet est un outil de suivi. Ses messages humoristiques ne sont pas des conseils d'investissement." } }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Carnet</a>
+    <a class="cta" href="app.html">Ouvrir l'appli</a>
+  </div>
+</header>
+
+<main id="contenu" class="wrap">
+  <h1>Ton budget du mois, noté en une phrase</h1>
+  <p class="lead">Carnet est une appli gratuite de budget personnel, pensée pour le téléphone. Tu fixes ce que tu veux dépenser, tu notes chaque dépense comme un SMS, et tu vois tout de suite où tu en es.</p>
+  <p><a class="cta" href="app.html">Ouvrir Carnet</a></p>
+
+  <h2>Ce que fait Carnet</h2>
+  <ul class="grid">
+    <li class="card"><h3>Prévisions</h3><p>Un budget principal pour le mois (par exemple 350 €), réparti entre tes catégories : logement, alimentation, sorties, transports… Les dépenses récurrentes comme les abonnements s'ajoutent toutes seules.</p></li>
+    <li class="card"><h3>Saisie rapide</h3><p>Écris « 12€ boulangerie » ou « 45 essence hier ». Carnet range la dépense et te répond : « Tu es à 90 € / 150 € dans Transports ce mois-ci ».</p></li>
+    <li class="card"><h3>Journal</h3><p>Un calendrier du mois avec le total de chaque jour, le détail des dépenses et le solde restant, avec une estimation de ce que tu peux dépenser par jour.</p></li>
+  </ul>
+
+  <h2>Tes données restent chez toi</h2>
+  <p>Carnet enregistre tes dépenses dans le navigateur de ton appareil. Il n'y a ni compte, ni cookie, ni mesure d'audience, ni publicité. Tu peux exporter ou effacer tes données à tout moment depuis l'onglet Prévisions. Le détail est dans la <a href="confidentialite.html">politique de confidentialité</a>.</p>
+
+  <h2>Questions fréquentes</h2>
+  <h3>Carnet est-il gratuit ?</h3>
+  <p>Oui, gratuit, sans publicité et sans abonnement.</p>
+  <h3>Mes données sont-elles synchronisées entre mon téléphone et mon ordinateur ?</h3>
+  <p>Pas pour l'instant : chaque appareil garde ses propres données. L'export JSON permet d'en garder une copie.</p>
+  <h3>Carnet donne-t-il des conseils financiers ?</h3>
+  <p>Non. C'est un outil de suivi. Les messages drôles qui s'affichent après une dépense ne sont pas des conseils d'investissement.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav aria-label="Informations légales">
+      <ul>
+        <li><a href="mentions-legales.html">Mentions légales</a></li>
+        <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+        <li><a href="confidentialite.html#cookies">Cookies et stockage local</a></li>
+        <li><a href="cgu.html">Conditions d'utilisation</a></li>
+      </ul>
+    </nav>
+    <p>Contact : <a href="mailto:macroapp@outlook.fr">macroapp@outlook.fr</a></p>
+  </div>
+</footer>
+</body>
+</html>
