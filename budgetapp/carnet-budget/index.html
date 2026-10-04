@@ -16,6 +16,12 @@
 {"@context":"https://schema.org","@type":"WebApplication","name":"Carnet","url":"https://carnet-budget-zeta.vercel.app/","applicationCategory":"FinanceApplication","operatingSystem":"Navigateur web (mobile et ordinateur)","inLanguage":"fr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"description":"Appli de budget personnel : prévisions par catégorie, saisie rapide des dépenses en langage naturel, journal quotidien, dépenses récurrentes, compte gratuit synchronisé."}
 </script>
 <meta name="theme-color" content="#f6f5f2">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Carnet">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="assets/fonts.css">
 <style>
 /* Reset minimal (remplace celui qu'ajoutait claude.ai) */
@@ -63,7 +69,7 @@ button{cursor:pointer}
 header.top{padding:16px 18px 10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand a{color:inherit;text-decoration:none}
 .brand{margin:0;font-family:var(--round);font-weight:600;font-size:24px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
-.brand::before{content:"€";width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:17px;background:var(--grad);color:var(--grad-ink);box-shadow:inset 0 0 0 3px rgba(255,255,255,.45),0 4px 10px -3px rgba(245,159,0,.7)}
+.brand::before{content:"";width:34px;height:34px;border-radius:10px;background:url(icons/icon-180.png) center/cover;box-shadow:0 4px 10px -3px rgba(0,0,0,.35)}
 .monthnav{display:flex;align-items:center;gap:2px;background:var(--surface);border-radius:99px;padding:3px;box-shadow:var(--shadow)}
 .monthnav button{border:0;background:transparent;width:30px;height:30px;border-radius:99px;color:var(--muted);font-size:18px;line-height:1}
 .monthnav button:hover{background:var(--track)}
@@ -94,7 +100,7 @@ main.chatmode{overflow:hidden;padding-bottom:10px}
 @keyframes pulse{50%{transform:scale(1.02)}}
 #auth{position:fixed;inset:0;z-index:90;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:max(28px,env(safe-area-inset-top,0px)) 16px 28px;background:radial-gradient(60% 45% at 0% 0%,var(--glow1),transparent 70%),radial-gradient(55% 40% at 100% 100%,var(--glow2),transparent 70%),var(--bg)}
 .auth-card{width:100%;max-width:420px;background:var(--surface);border-radius:28px;padding:26px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;margin-top:4vh}
-.auth-logo{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-family:var(--round);font-weight:600;font-size:26px;background:var(--grad);color:var(--grad-ink)}
+.auth-logo{width:64px;height:64px;border-radius:18px;background:url(icons/icon-180.png) center/cover;box-shadow:0 8px 18px -8px rgba(0,0,0,.4)}
 .auth-card h2{font-family:var(--round);font-weight:600;font-size:26px;line-height:1.15;margin:4px 0 0;text-wrap:balance}
 .auth-card .hint{margin:0}
 .auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--track);padding:4px;border-radius:99px;margin-top:6px}
@@ -256,7 +262,7 @@ nav.tabs button[aria-selected="true"]{background:var(--grad);color:var(--grad-in
   </div>
   <section id="auth" hidden aria-labelledby="auth-title">
     <div class="auth-card">
-      <div class="auth-logo" aria-hidden="true">€</div>
+      <div class="auth-logo" aria-hidden="true"></div>
       <h2 id="auth-title">Ton budget, toujours avec toi</h2>
       <p class="hint" id="auth-sub">Crée un compte gratuit pour retrouver ton suivi sur ton téléphone et ton ordinateur.</p>
       <div class="auth-tabs" role="tablist">
