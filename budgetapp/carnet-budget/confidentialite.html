@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Politique de confidentialité · Carnet</title>
 <meta name="description" content="Quelles données Carnet traite, pourquoi, combien de temps, et comment exercer tes droits.">
-<link rel="canonical" href="https://carnet-budget.vercel.app/confidentialite.html">
+<link rel="canonical" href="https://carnet-budget-zeta.vercel.app/confidentialite.html">
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/site.css">
 </head>
@@ -14,18 +14,19 @@
 <header class="site">
   <div class="wrap">
     <a class="logo" href="index.html">Carnet</a>
-    <a class="cta" href="app.html">Ouvrir l'appli</a>
+    <a class="cta" href="./">Ouvrir l’appli</a>
   </div>
 </header>
 
 <main id="contenu" class="wrap">
   <h1>Politique de confidentialité</h1>
-  <p>Dernière mise à jour : 1<sup>er</sup> octobre 2026</p>
+  <p>Dernière mise à jour : 2 octobre 2026</p>
 
   <h2>En bref</h2>
   <ul>
-    <li>Tes dépenses, budgets et catégories sont enregistrés <strong>dans ton navigateur, sur ton appareil</strong>. Je ne les reçois pas.</li>
-    <li>Carnet n'utilise <strong>aucun cookie</strong>, aucune mesure d'audience, aucune publicité et aucun service tiers dans la page.</li>
+    <li><strong>Sans compte</strong>, ton budget reste dans ton navigateur, sur ton appareil. Je ne le reçois pas.</li>
+    <li><strong>Avec un compte</strong>, ton email et ton budget sont stockés dans une base de données en Europe (Supabase), pour que tu le retrouves sur tous tes appareils. Seul ton compte y a accès.</li>
+    <li>Carnet n'utilise <strong>aucun cookie</strong>, aucune mesure d'audience et aucune publicité.</li>
     <li>Comme pour tout site, l'hébergeur enregistre des journaux techniques (adresse IP notamment) pour faire fonctionner le site et le protéger.</li>
   </ul>
 
@@ -34,12 +35,12 @@
 
   <h2>Les traitements, un par un</h2>
 
-  <h3>1. Tes données de budget (dans ton navigateur)</h3>
+  <h3>1. Tes données de budget sur ton appareil</h3>
   <div class="table-wrap"><table>
     <tr><th scope="row">Données</th><td>Montants et libellés des dépenses, dates, catégories et mots-clés, budget principal et budgets par catégorie, dépenses récurrentes, messages échangés dans l'onglet Saisie, dernier onglet ouvert.</td></tr>
     <tr><th scope="row">But</th><td>Faire fonctionner l'appli : calculer tes totaux, ton solde et afficher ton journal.</td></tr>
-    <tr><th scope="row">Où</th><td>Uniquement dans le stockage local (<code>localStorage</code>) de ton navigateur. L'analyse de tes phrases (« 12€ boulangerie ») se fait sur ton appareil, sans envoi à un serveur ni à une IA.</td></tr>
-    <tr><th scope="row">Qui y a accès</th><td>Toi, et toute personne qui utilise le même navigateur sur le même appareil. Ni l'éditeur ni l'hébergeur n'y ont accès.</td></tr>
+    <tr><th scope="row">Où</th><td>Dans le stockage local (<code>localStorage</code>) de ton navigateur. Si tu as un compte, une copie est aussi sauvegardée dans ton compte (point 4). L'analyse de tes phrases (« 12€ boulangerie ») se fait sur ton appareil, sans envoi à un serveur ni à une IA.</td></tr>
+    <tr><th scope="row">Qui y a accès</th><td>Toi, et toute personne qui utilise le même navigateur sur le même appareil. Quand tu te déconnectes, les données sont effacées de l'appareil.</td></tr>
     <tr><th scope="row">Durée</th><td>Jusqu'à ce que tu les effaces : bouton « Effacer toutes mes données » dans l'onglet Prévisions, ou suppression des données du site dans les réglages de ton navigateur.</td></tr>
   </table></div>
 
@@ -62,22 +63,17 @@
     <tr><th scope="row">Durée</th><td>Le temps de traiter la demande, puis 1 an.</td></tr>
   </table></div>
 
-  <!-- ============================================================
-       SECTION À PUBLIER LE JOUR OÙ LES COMPTES SUPABASE SERONT EN LIGNE.
-       Tant que les comptes n'existent pas dans le code, laisse-la commentée :
-       une politique doit décrire ce que le site fait vraiment.
-  ============================================================
   <h3>4. Ton compte Carnet</h3>
   <div class="table-wrap"><table>
     <tr><th scope="row">Données</th><td>Adresse email, mot de passe (stocké uniquement sous forme chiffrée irréversible par Supabase Auth, jamais lisible par l'éditeur), dates de création et de dernière connexion, et tes données de budget synchronisées (les mêmes qu'au point 1).</td></tr>
     <tr><th scope="row">But</th><td>Te permettre de te connecter et de retrouver ton budget sur tous tes appareils.</td></tr>
     <tr><th scope="row">Base légale</th><td>Exécution du contrat (article 6.1.b du RGPD) : les conditions d'utilisation que tu acceptes à l'inscription.</td></tr>
-    <tr><th scope="row">Destinataires</th><td>L'éditeur (administration technique uniquement) et Supabase, Inc., sous-traitant pour la base de données et l'authentification, dont l'infrastructure repose sur Amazon Web Services.</td></tr>
-    <tr><th scope="row">Localisation</th><td>Base de données hébergée dans l'Union européenne, région <span class="todo">[RÉGION SUPABASE À COMPLÉTER, ex. Paris ou Francfort]</span>. Supabase étant une société américaine, un accès depuis les États-Unis reste possible : <span class="todo">[GARANTIE À VÉRIFIER dans le DPA Supabase : certification Data Privacy Framework et/ou clauses contractuelles types]</span>.</td></tr>
-    <tr><th scope="row">Emails envoyés</th><td>Emails de confirmation et de réinitialisation du mot de passe, envoyés via <span class="todo">[SERVICE D'ENVOI À COMPLÉTER]</span>. Aucun email promotionnel.</td></tr>
-    <tr><th scope="row">Durée</th><td>Tant que ton compte existe. Quand tu supprimes ton compte, toutes ses données sont effacées sous 30 jours. Un compte inactif pendant 3 ans est supprimé, après un email de prévenance.</td></tr>
+    <tr><th scope="row">Destinataires</th><td>L'éditeur, uniquement pour l'administration technique (il ne consulte pas les budgets). Supabase Pte. Ltd, 65 Chulia Street #38-02/03, OCBC Centre, Singapour 049513, sous-traitant pour la base de données, l'authentification et l'envoi des emails de compte, dont l'infrastructure repose sur Amazon Web Services.</td></tr>
+    <tr><th scope="row">Localisation</th><td>Base de données hébergée dans l'Union européenne (région Irlande, eu-west-1). Supabase n'étant pas une société européenne, un accès depuis l'extérieur de l'UE reste possible pour le support et la maintenance : il est encadré par les clauses contractuelles types de la Commission européenne, intégrées à l'accord de traitement des données de Supabase.</td></tr>
+    <tr><th scope="row">Emails envoyés</th><td>Emails de confirmation d'inscription et de réinitialisation du mot de passe, envoyés par Supabase. Aucun email promotionnel.</td></tr>
+    <tr><th scope="row">Durée</th><td>Tant que ton compte existe. Le bouton « Supprimer mon compte » (onglet Prévisions) efface immédiatement ton compte et ton budget de la base de données ; les copies de sauvegarde de Supabase disparaissent ensuite selon leur propre rotation. Un compte inactif pendant 3 ans est supprimé, après un email de prévenance.</td></tr>
   </table></div>
-  ============================================================ -->
+
 
   <h2>Ce que Carnet ne fait pas</h2>
   <ul>
@@ -93,14 +89,16 @@
     <tbody>
       <tr><td><code>carnet-budget-v1</code></td><td>Carnet (ce site)</td><td>Enregistrer tes budgets, catégories, dépenses et messages</td><td>Jusqu'à ce que tu l'effaces</td></tr>
       <tr><td><code>carnet-budget-v1-tab</code></td><td>Carnet (ce site)</td><td>Rouvrir l'appli sur le dernier onglet utilisé</td><td>Jusqu'à ce que tu l'effaces</td></tr>
+      <tr><td><code>carnet-session</code></td><td>Carnet (ce site)</td><td>Te garder connecté à ton compte (jetons de connexion)</td><td>Jusqu'à la déconnexion</td></tr>
+      <tr><td><code>carnet-budget-v1-guest</code></td><td>Carnet (ce site)</td><td>Retenir que tu as choisi d'utiliser l'appli sans compte</td><td>Jusqu'à ce que tu l'effaces ou crées un compte</td></tr>
     </tbody>
   </table></div>
-  <p>Ce stockage est strictement nécessaire au service que tu demandes. Il est donc dispensé de consentement (article 82 de la loi Informatique et Libertés), et c'est pourquoi Carnet n'affiche pas de bandeau cookies. Les polices sont servies par le site lui-même : aucune requête ne part vers Google ou un autre service. Si un outil de mesure d'audience ou un autre traceur était ajouté un jour, un bandeau de consentement serait mis en place avant.</p>
+  <p>Ce stockage est strictement nécessaire au service que tu demandes (fonctionnement de l'appli et connexion à ton compte). Il est donc dispensé de consentement (article 82 de la loi Informatique et Libertés), et c'est pourquoi Carnet n'affiche pas de bandeau cookies. Les polices sont servies par le site lui-même. Les seules requêtes vers un autre service sont celles vers Supabase, et seulement si tu utilises un compte. Si un outil de mesure d'audience ou un autre traceur était ajouté un jour, un bandeau de consentement serait mis en place avant.</p>
 
   <h2>Tes droits</h2>
   <p>Tu disposes des droits d'accès, de rectification, d'effacement, d'opposition, de limitation et de portabilité sur tes données (articles 15 à 21 du RGPD), ainsi que du droit de définir des directives sur leur sort après ton décès.</p>
   <ul>
-    <li><strong>Données de budget :</strong> elles sont sur ton appareil. Tu les exportes avec « Exporter mes données (JSON) » et tu les effaces avec « Effacer toutes mes données », dans l'onglet Prévisions.</li>
+    <li><strong>Directement dans l'appli</strong> (onglet Prévisions, rubrique « Mon compte ») : « Exporter mes données (JSON) » pour la portabilité, « Supprimer mon compte » pour l'effacement, ou « Effacer toutes mes données » si tu n'as pas de compte.</li>
     <li><strong>Autres données :</strong> écris à <a href="mailto:macroapp@outlook.fr">macroapp@outlook.fr</a>. Réponse sous un mois au plus tard.</li>
   </ul>
   <p>Si tu estimes que tes droits ne sont pas respectés, tu peux saisir la CNIL : cnil.fr, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07.</p>
