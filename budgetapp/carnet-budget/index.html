@@ -201,9 +201,23 @@ main.chatmode{overflow:hidden;padding-bottom:10px}
 .chip:hover{background:var(--c,#e8a100);color:#fff}
 .tag{display:inline-block;font-size:12px;padding:2px 10px;border-radius:99px;background:color-mix(in srgb,var(--c) 17%,var(--surface));color:color-mix(in srgb,var(--c) 50%,var(--ink));font-weight:800}
 .composer{flex:0 0 auto;padding-top:8px;display:flex;flex-direction:column;gap:8px}
-.suggest{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
-.suggest .chip{white-space:nowrap}
-.composer form{display:flex;gap:8px;background:var(--surface);border-radius:99px;padding:6px;box-shadow:var(--shadow)}
+.step{display:flex;flex-direction:column;gap:8px}
+.step-title{margin:0 4px;font-weight:800;font-size:14px;color:var(--muted)}
+.step-title b{color:var(--ink);font-family:var(--round);font-weight:600;font-size:17px}
+.step-head{display:flex;align-items:center;gap:6px}
+.back{border:0;background:var(--surface);width:34px;height:34px;border-radius:50%;font-size:20px;font-weight:900;color:var(--muted);box-shadow:var(--shadow);flex:0 0 34px}
+.euro{font-family:var(--round);font-weight:600;font-size:22px;color:var(--muted);align-self:center;padding-right:4px}
+#in-amount{font-family:var(--round);font-weight:600;font-size:24px!important}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:46vh;overflow-y:auto}
+.cat-pick{border:0;border-radius:18px;padding:12px 6px;background:var(--surface);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:800;font-size:13px;color:var(--ink);min-width:0}
+.cat-pick .avatar{flex:0 0 auto;width:38px;height:38px;border-radius:13px;font-size:16px}
+.cat-pick span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.when{display:flex;gap:6px}
+.when button{border:0;border-radius:99px;padding:7px 13px;font-weight:800;font-size:13px;background:var(--surface);color:var(--muted);box-shadow:var(--shadow)}
+.when button[aria-checked="true"]{background:var(--grad);color:var(--grad-ink)}
+.shake{animation:shake2 .3s}
+@keyframes shake2{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.composer form.pill{display:flex;gap:8px;background:var(--surface);border-radius:99px;padding:6px;box-shadow:var(--shadow)}
 .composer input{flex:1;min-width:0;border:0;border-radius:99px;padding:10px 14px;background:transparent;font-size:16px}
 .composer input:focus{outline:none}
 .send{border:0;border-radius:50%;width:44px;height:44px;background:var(--grad);color:var(--grad-ink);font-weight:900;font-size:19px;flex:0 0 44px}
@@ -292,12 +306,28 @@ nav.tabs button[aria-selected="true"]{background:var(--grad);color:var(--grad-in
     <section class="view" id="view-chat" hidden>
       <div class="msgs" id="msgs"></div>
       <div class="composer">
-        <div class="suggest" id="suggest"></div>
-        <form id="chatform" autocomplete="off">
-          <label for="chatinput" class="sr-only">Décris ta dépense (montant et libellé)</label>
-          <input id="chatinput" placeholder="12€ boulangerie, 45 essence hier…" enterkeyhint="send">
-          <button class="send" aria-label="Envoyer">↑</button>
-        </form>
+        <div class="step" id="step1">
+          <p class="step-title">Combien ?</p>
+          <form id="f-amount" class="pill" autocomplete="off">
+            <label for="in-amount" class="sr-only">Montant de la dépense en euros</label>
+            <input id="in-amount" type="text" inputmode="decimal" placeholder="19" enterkeyhint="next">
+            <span class="euro">€</span>
+            <button class="send" aria-label="Suivant">→</button>
+          </form>
+        </div>
+        <div class="step" id="step2" hidden>
+          <div class="step-head"><button type="button" class="back" id="back1" aria-label="Revenir au montant">‹</button><p class="step-title"><b id="s2-amt"></b> · c'était pour quoi ?</p></div>
+          <div class="cat-grid" id="cat-grid"></div>
+        </div>
+        <div class="step" id="step3" hidden>
+          <div class="step-head"><button type="button" class="back" id="back2" aria-label="Revenir à la catégorie">‹</button><p class="step-title"><b id="s3-amt"></b> · <span id="s3-cat"></span></p></div>
+          <div class="when" id="when" role="radiogroup" aria-label="Date de la dépense"></div>
+          <form id="f-detail" class="pill" autocomplete="off">
+            <label for="in-detail" class="sr-only">Détail de la dépense (facultatif)</label>
+            <input id="in-detail" type="text" maxlength="60" placeholder="Un détail ? ex. resto anniv de Margot" enterkeyhint="done">
+            <button class="send" aria-label="Ajouter la dépense">✓</button>
+          </form>
+        </div>
       </div>
     </section>
     <section class="view" id="view-journal" hidden></section>
@@ -353,14 +383,14 @@ function seed() {
   });
   return {
     version: 1, categories: cats, transactions: [], // plus de dépenses d'exemple pour les nouveaux utilisateurs
-    messages: [{ id: uid(), role: 'bot', kind: 'text', html: 'Écris une dépense comme <b>12€ boulangerie</b> ou <b>45 essence hier</b>. Je la range dans la bonne catégorie et je te dis où tu en es.' }]
+    messages: [{ id: uid(), role: 'bot', kind: 'text', html: 'Note une dépense en 3 étapes : <b>le prix</b>, puis <b>la catégorie</b>, puis <b>un détail</b> si tu veux (ex. « resto anniv de Margot »). Je te dis tout de suite où tu en es.' }]
   };
 }
 
 function normalize(s) {
   if (!s || !s.categories) s = seed();
   s.transactions = s.transactions || [];
-  s.messages = s.messages || [];
+  s.messages = (s.messages || []).map(m => m.kind === 'text' && /Écris une dépense comme/.test(m.html || '') ? Object.assign({}, m, { html: 'Note une dépense en 3 étapes : <b>le prix</b>, puis <b>la catégorie</b>, puis <b>un détail</b> si tu veux (ex. « resto anniv de Margot »). Je te dis tout de suite où tu en es.' }) : m);
   s.recurring = s.recurring || [];
   s.recurDone = s.recurDone || {};
   s.camille = s.camille || {};
@@ -572,11 +602,47 @@ function renderMsg(m) {
   }
   return '';
 }
+/* ---------- Saisie en 3 étapes : prix → catégorie → détail ---------- */
+const draft = { step: 1, amount: 0, categoryId: null, dayOffset: 0 };
+function renderComposer() {
+  const $ = id => document.getElementById(id);
+  [1, 2, 3].forEach(n => $('step' + n).hidden = draft.step !== n);
+  if (draft.step >= 2) $('s2-amt').textContent = eur(draft.amount);
+  if (draft.step === 2) {
+    $('cat-grid').innerHTML = state.categories.map(c => `<button type="button" class="cat-pick" data-pick="${c.id}"><span class="avatar" style="--c:${colorOf(c.id)}">${esc(c.name.charAt(0).toUpperCase())}</span><span>${esc(c.name)}</span></button>`).join('');
+  }
+  if (draft.step === 3) {
+    $('s3-amt').textContent = eur(draft.amount);
+    $('s3-cat').innerHTML = tagHTML(draft.categoryId);
+    $('when').innerHTML = [[0, "Aujourd'hui"], [1, 'Hier'], [2, 'Avant-hier']].map(([o, l]) => `<button type="button" role="radio" aria-checked="${draft.dayOffset === o}" data-when="${o}">${l}</button>`).join('');
+  }
+}
+function goStep(n) {
+  draft.step = n; renderComposer();
+  const focusId = n === 1 ? 'in-amount' : n === 3 ? 'in-detail' : null;
+  if (focusId) setTimeout(() => document.getElementById(focusId).focus({ preventScroll: true }), 30);
+  else document.activeElement && document.activeElement.blur();
+  const box = document.getElementById('msgs'); setTimeout(() => { box.scrollTop = box.scrollHeight; }, 60);
+}
+function addFromDraft() {
+  const detail = document.getElementById('in-detail').value.trim();
+  const c = cat(draft.categoryId);
+  const d = new Date(); d.setDate(d.getDate() - draft.dayOffset);
+  const label = detail || (c ? c.name : 'Dépense');
+  if (detail) learn(draft.categoryId, detail);
+  state.messages.push({ id: uid(), role: 'user', text: `${eur(draft.amount)} · ${c ? c.name : ''}${detail ? ' · ' + detail : ''}` });
+  state.messages.push(confirmMsg(addTx({ amount: draft.amount, label, categoryId: draft.categoryId, date: iso(d) })));
+  state.messages = state.messages.slice(-80);
+  document.getElementById('in-amount').value = '';
+  document.getElementById('in-detail').value = '';
+  Object.assign(draft, { step: 1, amount: 0, categoryId: null, dayOffset: 0 });
+  save(); render();
+  setTimeout(() => document.getElementById('in-amount').focus({ preventScroll: true }), 30);
+}
 function renderChat() {
   const box = document.getElementById('msgs');
   box.innerHTML = state.messages.map(renderMsg).join('');
-  const sug = ['12€ boulangerie', '45 essence', '8,50 kebab hier', '30€ courses'];
-  document.getElementById('suggest').innerHTML = sug.map(s => `<button class="chip" data-sug="${esc(s)}">${esc(s)}</button>`).join('');
+  renderComposer();
   const toBottom = () => { box.scrollTop = box.scrollHeight; };
   requestAnimationFrame(toBottom); setTimeout(toBottom, 120);
 }
@@ -762,7 +828,7 @@ document.querySelector('nav.tabs').addEventListener('click', e => {
   try { localStorage.setItem(KEY + '-tab', tab); } catch (err) {}
   document.getElementById('main').scrollTop = 0;
   render();
-  if (tab === 'chat') document.getElementById('chatinput').focus({ preventScroll: true });
+  if (tab === 'chat' && draft.step === 1) document.getElementById('in-amount').focus({ preventScroll: true });
 });
 function shiftMonth(n) {
   const [y, m] = viewMonth.split('-').map(Number);
@@ -781,15 +847,28 @@ document.getElementById('clearsample').onclick = () => {
   state.messages = state.messages.filter(m => !(m.kind === 'confirm' && ids.has(m.txId)));
   save(); render();
 };
-document.getElementById('chatform').addEventListener('submit', e => {
+document.getElementById('f-amount').addEventListener('submit', e => {
   e.preventDefault();
-  const i = document.getElementById('chatinput'); const v = i.value; i.value = '';
-  handleInput(v);
+  const i = document.getElementById('in-amount');
+  const v = parseFloat(i.value.replace(',', '.').replace(/[^0-9.]/g, ''));
+  if (!(v > 0)) { const f = e.target; f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); i.focus(); return; }
+  draft.amount = Math.round(v * 100) / 100;
+  goStep(2);
+});
+document.getElementById('f-detail').addEventListener('submit', e => { e.preventDefault(); addFromDraft(); });
+document.getElementById('back1').onclick = () => goStep(1);
+document.getElementById('back2').onclick = () => goStep(2);
+document.getElementById('cat-grid').addEventListener('click', e => {
+  const b = e.target.closest('[data-pick]'); if (!b) return;
+  draft.categoryId = b.dataset.pick; goStep(3);
+});
+document.getElementById('when').addEventListener('click', e => {
+  const b = e.target.closest('[data-when]'); if (!b) return;
+  draft.dayOffset = +b.dataset.when; renderComposer();
 });
 document.getElementById('main').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   const d = t.dataset;
-  if (d.sug) { const i = document.getElementById('chatinput'); i.value = d.sug; i.focus(); }
   if (d.ask) {
     const m = state.messages.find(x => x.id === d.ask); if (!m || m.resolved) return;
     const p = { ...m.pending, categoryId: d.cat };
