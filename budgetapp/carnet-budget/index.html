@@ -189,6 +189,18 @@ main.chatmode{overflow:hidden;padding-bottom:10px}
 .rec{flex-wrap:wrap}
 .rec-actions{flex-basis:100%;display:flex;justify-content:flex-end;gap:6px}
 .recform input[type=date]{min-width:0}
+#sheet{position:fixed;inset:0;z-index:80;background:rgba(20,18,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet-card{width:100%;max-width:520px;max-height:82vh;overflow-y:auto;overscroll-behavior:contain;background:var(--bg);border-radius:28px 28px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:.6}}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sheet-head h2{margin:0;font-family:var(--round);font-weight:600;font-size:22px}
+.sheet-row{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:16px;padding:10px 12px;box-shadow:var(--shadow)}
+.sheet-row .l{flex:1;min-width:0;display:flex;flex-direction:column}
+.sheet-row .l b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sheet-row .amt{font-family:var(--round);font-weight:600;font-size:16px;white-space:nowrap}
+.sheet-row .amt.neg{color:#2b8a3e}
+.chev-sm{color:var(--muted);font-weight:900}
+[data-opencat]{cursor:pointer}
 .btn{grid-column:1/-1}
 .btn{border:0;border-radius:16px;padding:10px 16px;background:var(--grad);color:var(--grad-ink);font-weight:800}
 
@@ -223,6 +235,11 @@ main.chatmode{overflow:hidden;padding-bottom:10px}
 .when-other{position:relative;border-radius:99px;padding:7px 13px;font-weight:800;font-size:13px;background:var(--surface);color:var(--muted);box-shadow:var(--shadow);overflow:hidden}
 .when-other.on{background:var(--grad);color:var(--grad-ink)}
 .when-other input{position:absolute;inset:0;opacity:0;width:100%;height:100%;border:0;padding:0;font-size:16px}
+.refund-pick{display:flex;flex-direction:column;gap:6px}
+.refund-toggle{align-self:flex-start;cursor:pointer}
+.refund-toggle input{position:static;opacity:1;width:auto;height:auto;margin:0 4px 0 0;accent-color:#e8a100}
+#refund-fields{display:flex;gap:6px}
+#refund-fields input{flex:1;min-width:0;border:0;border-radius:99px;padding:10px 14px;background:var(--surface);box-shadow:var(--shadow);font-size:16px}
 .shake{animation:shake2 .3s}
 @keyframes shake2{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .composer form.pill{display:flex;gap:8px;background:var(--surface);border-radius:99px;padding:6px;box-shadow:var(--shadow)}
@@ -309,6 +326,12 @@ nav.tabs button[aria-selected="true"]{background:var(--grad);color:var(--grad-in
       <button type="button" class="auth-link" id="auth-guest">Continuer sans compte</button>
     </div>
   </section>
+  <div id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-card">
+      <div class="sheet-head"><h2 id="sheet-title"></h2><button type="button" class="back" id="sheet-close" aria-label="Fermer">✕</button></div>
+      <div id="sheet-body"></div>
+    </div>
+  </div>
   <main id="main">
     <section class="view" id="view-budget" hidden></section>
     <section class="view" id="view-chat" hidden>
@@ -330,9 +353,16 @@ nav.tabs button[aria-selected="true"]{background:var(--grad);color:var(--grad-in
         <div class="step" id="step3" hidden>
           <div class="step-head"><button type="button" class="back" id="back2" aria-label="Revenir à la catégorie">‹</button><p class="step-title"><b id="s3-amt"></b> · <span id="s3-cat"></span></p></div>
           <div class="when" id="when" role="radiogroup" aria-label="Date de la dépense"></div>
+          <div class="refund-pick">
+            <label class="when-other refund-toggle" id="rt-label"><input type="checkbox" id="in-refund"> ↩ On me rembourse</label>
+            <div id="refund-fields" hidden>
+              <input id="in-refund-who" type="text" maxlength="30" placeholder="Qui ? ex. ton coloc" aria-label="Qui te rembourse">
+              <input id="in-refund-amt" type="text" inputmode="decimal" placeholder="Montant" aria-label="Montant qu'on va te rembourser">
+            </div>
+          </div>
           <form id="f-detail" class="pill" autocomplete="off">
             <label for="in-detail" class="sr-only">Détail de la dépense (facultatif)</label>
-            <input id="in-detail" type="text" maxlength="60" placeholder="Un détail ? ex. resto anniv de Margot" enterkeyhint="done">
+            <input id="in-detail" type="text" maxlength="60" placeholder="Un détail ? ex. une fusée d’occasion" enterkeyhint="done">
             <button class="send" aria-label="Ajouter la dépense">✓</button>
           </form>
         </div>
@@ -391,14 +421,14 @@ function seed() {
   });
   return {
     version: 1, categories: cats, transactions: [], // plus de dépenses d'exemple pour les nouveaux utilisateurs
-    messages: [{ id: uid(), role: 'bot', kind: 'text', html: 'Note une dépense en 3 étapes : <b>le prix</b>, puis <b>la catégorie</b>, puis <b>un détail</b> si tu veux (ex. « resto anniv de Margot »). Je te dis tout de suite où tu en es.' }]
+    messages: [{ id: uid(), role: 'bot', kind: 'text', html: 'Note une dépense en 3 étapes : <b>le prix</b>, puis <b>la catégorie</b>, puis <b>un détail</b> si tu veux (ex. « une fusée d’occasion »). Je te dis tout de suite où tu en es.' }]
   };
 }
 
 function normalize(s) {
   if (!s || !s.categories) s = seed();
   s.transactions = s.transactions || [];
-  s.messages = (s.messages || []).map(m => m.kind === 'text' && /Écris une dépense comme/.test(m.html || '') ? Object.assign({}, m, { html: 'Note une dépense en 3 étapes : <b>le prix</b>, puis <b>la catégorie</b>, puis <b>un détail</b> si tu veux (ex. « resto anniv de Margot »). Je te dis tout de suite où tu en es.' }) : m);
+  s.messages = (s.messages || []).map(m => m.kind === 'text' && /Écris une dépense comme|anniv de Margot/.test(m.html || '') ? Object.assign({}, m, { html: 'Note une dépense en 3 étapes : <b>le prix</b>, puis <b>la catégorie</b>, puis <b>un détail</b> si tu veux (ex. « une fusée d’occasion »). Je te dis tout de suite où tu en es.' }) : m);
   s.recurring = s.recurring || [];
   s.recurDone = s.recurDone || {};
   s.camille = s.camille || {};
@@ -444,12 +474,18 @@ const heroBg = r => `linear-gradient(135deg, ${heat(Math.max(0, r - .06))} 0%, $
 const moodOf = r => r < .5 ? 'Ça va, tu gères 😌' : r < .8 ? 'Attention, ça chauffe 👀' : r <= 1 ? 'Zone rouge, lève le pied 🔥' : 'Budget explosé 💸';
 const tagHTML = id => `<span class="tag" style="--c:${colorOf(id)}">${esc(cat(id)?.name || '—')}</span>`;
 const txOfMonth = m => state.transactions.filter(t => monthOf(t.date) === m);
-const spent = (catId, m) => txOfMonth(m).filter(t => t.categoryId === catId).reduce((s, t) => s + t.amount, 0);
-const pendingRefunds = () => (state.refunds || []).filter(r => r.status === 'pending').reduce((a, r) => a + r.amount, 0);
+// Montant réellement à ta charge : la dépense moins ce qu'on t'a remboursé dessus
+const refundOf = t => (t.refund && t.refund.status === 'received') ? +t.refund.amount || 0 : 0;
+const amtHTML = t => t.refund ? (t.refund.status === 'received'
+  ? `<s class="hint">${eur(t.amount)}</s> ${eur(net(t))}`
+  : `${eur(t.amount)} <span class="hint">↩ ${eur(t.refund.amount)} attendu</span>`) : eur(t.amount);
+const net = t => Math.round((t.amount - refundOf(t)) * 100) / 100;
+const spent = (catId, m) => txOfMonth(m).filter(t => t.categoryId === catId).reduce((s, t) => s + net(t), 0);
+const pendingRefunds = () => (state.refunds || []).filter(r => r.status === 'pending').reduce((a, r) => a + r.amount, 0) + state.transactions.filter(t => t.refund && t.refund.status === 'pending').reduce((a, t) => a + (+t.refund.amount || 0), 0);
 const allocated = () => state.categories.reduce((s, c) => s + (+c.budget || 0), 0);
 // Le budget principal (s'il est défini) sert de référence ; sinon on prend la somme des catégories.
 const totalBudget = () => (+state.mainBudget > 0 ? +state.mainBudget : allocated());
-const totalSpent = m => txOfMonth(m).reduce((s, t) => s + t.amount, 0);
+const totalSpent = m => txOfMonth(m).reduce((s, t) => s + net(t), 0);
 const level = (s, b) => !b ? (s ? 'over' : '') : s > b ? 'over' : s / b >= .8 ? 'warn' : '';
 const barHTML = (s, b, c) => `<div class="bar" style="--c:${c || heat(b ? s / b : 0)}"><i class="${level(s, b) === 'over' ? 'over' : ''}" style="width:${b ? Math.min(100, s / b * 100) : (s ? 100 : 0)}%"></i></div>`;
 const monthName = m => { const [y, mo] = m.split('-'); return new Date(y, mo - 1, 1).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }); };
@@ -612,8 +648,43 @@ function renderMsg(m) {
   }
   return '';
 }
+/* ---------- Détail d'une catégorie ---------- */
+let sheetCat = null;
+function renderSheet() {
+  const el = document.getElementById('sheet');
+  if (!sheetCat) { el.hidden = true; return; }
+  const m = viewMonth;
+  const list = txOfMonth(m).filter(t => sheetCat === '__none' ? !cat(t.categoryId) : t.categoryId === sheetCat).sort((a, b) => b.date.localeCompare(a.date));
+  const c = cat(sheetCat), b = c ? +c.budget || 0 : 0;
+  const sum = list.reduce((a, t) => a + net(t), 0);
+  document.getElementById('sheet-title').textContent = (c ? c.name : 'Sans catégorie') + ' · ' + monthName(m);
+  document.getElementById('sheet-body').innerHTML = `
+    <div class="hint" style="font-weight:800">${eur(sum)} dépensés${b ? ' sur ' + eur(b) : ''} · ${list.length} opération(s)</div>
+    ${b ? barHTML(sum, b, colorOf(sheetCat)) : ''}
+    ${list.length ? list.map(t => `<div class="sheet-row">
+      <div class="l"><b>${esc(t.label)}</b><span class="hint">${new Date(t.date + 'T12:00').toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })}${t.recurId ? ' · récurrent' : ''}</span></div>
+      <span class="amt num ${t.amount < 0 ? 'neg' : ''}">${amtHTML(t)}</span>
+      <button class="linkbtn danger" data-sheetdel="${t.id}">${confirmDel.id === 'tx:' + t.id ? 'Confirmer' : 'Supprimer'}</button>
+    </div>`).join('') : '<p class="hint">Aucune dépense dans cette catégorie ce mois-ci.</p>'}`;
+  el.hidden = false;
+}
+document.getElementById('sheet-close').onclick = () => { sheetCat = null; confirmDel.id = null; renderSheet(); };
+document.getElementById('sheet').addEventListener('click', e => {
+  if (e.target.id === 'sheet') { sheetCat = null; confirmDel.id = null; renderSheet(); return; }
+  const b = e.target.closest('[data-sheetdel]'); if (!b) return;
+  const id = b.dataset.sheetdel;
+  if (confirmDel.id === 'tx:' + id) { state.transactions = state.transactions.filter(x => x.id !== id); confirmDel.id = null; save(); render(); }
+  else confirmDel.id = 'tx:' + id;
+  renderSheet();
+});
+document.getElementById('main').addEventListener('click', e => {
+  const o = e.target.closest('[data-opencat]'); if (!o) return;
+  sheetCat = o.dataset.opencat; confirmDel.id = null; renderSheet();
+});
+
 /* ---------- Saisie en 3 étapes : prix → catégorie → détail ---------- */
 const draft = { step: 1, amount: 0, categoryId: null, dayOffset: 0, date: null };
+const FUN_DETAILS = ['une fusée d’occasion', 'un lama de compagnie', 'un abonnement au club des pigeons', 'un château gonflable (pour moi)', 'une baguette en or', 'un cours de yodel', 'un costume de dinosaure', 'une licorne en leasing', 'du dentifrice au caviar', 'un ticket pour Mars (aller simple)', 'un canapé pour mon hamster', 'un abonnement à la sieste premium'];
 function renderComposer() {
   const $ = id => document.getElementById(id);
   [1, 2, 3].forEach(n => $('step' + n).hidden = draft.step !== n);
@@ -622,10 +693,14 @@ function renderComposer() {
     $('cat-grid').innerHTML = state.categories.map(c => `<button type="button" class="cat-pick" data-pick="${c.id}"><span class="avatar" style="--c:${colorOf(c.id)}">${esc(c.name.charAt(0).toUpperCase())}</span><span>${esc(c.name)}</span></button>`).join('');
   }
   if (draft.step === 3) {
+    $('in-detail').placeholder = 'Un détail ? ex. ' + FUN_DETAILS[Math.floor(Math.random() * FUN_DETAILS.length)];
     $('s3-amt').textContent = eur(draft.amount);
     $('s3-cat').innerHTML = tagHTML(draft.categoryId);
     const custom = draft.dayOffset === 'custom';
     const label = custom && draft.date ? new Date(draft.date + 'T12:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : 'Autre date';
+    $('in-refund').checked = !!draft.refund; $('refund-fields').hidden = !draft.refund;
+    $('rt-label').classList.toggle('on', !!draft.refund);
+    if (draft.refund && !$('in-refund-amt').value) $('in-refund-amt').value = String(draft.amount).replace('.', ',');
     $('when').innerHTML = [[0, "Aujourd'hui"], [1, 'Hier'], [2, 'Avant-hier']].map(([o, l]) => `<button type="button" role="radio" aria-checked="${draft.dayOffset === o}" data-when="${o}">${l}</button>`).join('')
       + `<label class="when-other ${custom ? 'on' : ''}"><span>📅 ${label}</span><input type="date" id="in-date" max="${today()}" value="${custom && draft.date ? draft.date : ''}" aria-label="Choisir une autre date"></label>`;
   }
@@ -644,11 +719,18 @@ function addFromDraft() {
   const label = detail || (c ? c.name : 'Dépense');
   if (detail) learn(draft.categoryId, detail);
   state.messages.push({ id: uid(), role: 'user', text: `${eur(draft.amount)} · ${c ? c.name : ''}${detail ? ' · ' + detail : ''}` });
-  state.messages.push(confirmMsg(addTx({ amount: draft.amount, label, categoryId: draft.categoryId, date: iso(d) })));
+  const newTx = addTx({ amount: draft.amount, label, categoryId: draft.categoryId, date: iso(d) });
+  if (draft.refund) {
+    const ra = parseFloat(document.getElementById('in-refund-amt').value.replace(',', '.'));
+    newTx.refund = { amount: ra > 0 ? Math.min(ra, draft.amount) : draft.amount, who: document.getElementById('in-refund-who').value.trim(), status: 'pending' };
+    state.messages[state.messages.length - 1].text += ` · ↩ ${eur(newTx.refund.amount)} à récupérer${newTx.refund.who ? ' (' + newTx.refund.who + ')' : ''}`;
+  }
+  state.messages.push(confirmMsg(newTx));
+  document.getElementById('in-refund-who').value = ''; document.getElementById('in-refund-amt').value = '';
   state.messages = state.messages.slice(-80);
   document.getElementById('in-amount').value = '';
   document.getElementById('in-detail').value = '';
-  Object.assign(draft, { step: 1, amount: 0, categoryId: null, dayOffset: 0, date: null });
+  Object.assign(draft, { step: 1, amount: 0, categoryId: null, dayOffset: 0, date: null, refund: false });
   save(); render();
   setTimeout(() => document.getElementById('in-amount').focus({ preventScroll: true }), 30);
 }
@@ -677,6 +759,7 @@ function renderBudget() {
         <div><span class="eyebrow">Reste</span><b class="num">${eur(tb - ts)}</b></div>
         <div><span class="eyebrow">Consommé</span><b class="num">${tb ? Math.round(ts / tb * 100) + ' %' : (ts > 0 ? 'Pas de budget' : '0 %')}</b></div>
       </div>
+      ${(() => { const r = txOfMonth(m).reduce((a, t) => a + (t.amount < 0 ? -t.amount : refundOf(t)), 0); return r > 0 ? `<div class="hint" style="font-weight:800">Payé ${eur(ts + r)} − déjà remboursé ${eur(r)} = ${eur(ts)} à ta charge</div>` : ''; })()}
       ${pendingRefunds() > 0 ? `<div class="hint" style="font-weight:800">💸 ${eur(pendingRefunds())} à récupérer (remboursements attendus)</div>` : ''}
     </div>
     ${(() => {
@@ -705,14 +788,15 @@ function renderBudget() {
         const col = colorOf(c.id);
         return `<div class="cat" style="--c:${col}">
           <div class="cat-row">
-            <div class="avatar">${esc(c.name.charAt(0).toUpperCase())}</div>
-            <div class="cat-name">${esc(c.name)}<small class="num">${eur(sp)} dépensés</small></div>
+            <div class="avatar" data-opencat="${c.id}">${esc(c.name.charAt(0).toUpperCase())}</div>
+            <div class="cat-name" data-opencat="${c.id}">${esc(c.name)} <span class="chev-sm">›</span><small class="num">${eur(sp)} dépensés</small></div>
             <label class="budget-input"><input id="b-${c.id}" type="number" inputmode="decimal" min="0" step="5" value="${b}" data-budget="${c.id}" aria-label="Budget ${esc(c.name)}"><span>€</span></label>
           </div>
           ${barHTML(sp, b, col)}
           <div class="cat-foot">
             <span class="pct ${level(sp, b) === 'over' ? 'over' : ''}">${b ? Math.round(sp / b * 100) + ' %' : 'Pas de budget'}${b && sp > b ? ' · +' + eur(sp - b) : b ? ' · reste ' + eur(b - sp) : ''}</span>
             <span>
+              <button class="linkbtn" data-opencat="${c.id}">Détail</button>
               <button class="linkbtn" data-kw="${c.id}">Mots-clés</button>
               <button class="linkbtn danger" data-delcat="${c.id}">${del ? 'Confirmer ?' : 'Supprimer'}</button>
             </span>
@@ -723,6 +807,9 @@ function renderBudget() {
           </div>
         </div>`;
       }).join('')}
+      ${(() => { const o = txOfMonth(m).filter(t => !cat(t.categoryId)); if (!o.length) return '';
+        const sum = o.reduce((a, t) => a + net(t), 0);
+        return `<div class="cat" style="--c:#9a98b5"><div class="cat-row"><div class="avatar" data-opencat="__none">?</div><div class="cat-name" data-opencat="__none">Sans catégorie <span class="chev-sm">›</span><small class="num">${eur(sum)} · ${o.length} opération(s) d'une catégorie supprimée</small></div></div></div>`; })()}
     </div>
     <form class="addform" id="addcat">
       <label for="newcat" class="sr-only">Nom de la nouvelle catégorie</label><input id="newcat" placeholder="Nouvelle catégorie" required>
@@ -749,32 +836,41 @@ function renderBudget() {
       </div>
     </form>
     <div class="sectiontitle">Remboursements attendus</div>
-    <p class="hint" style="margin:-6px 4px 0">Une dépense que tu as avancée et qu'on va te rendre (ex. resto payé pour Margot). Quand l'argent arrive, touche « Reçu » : il est déduit de tes dépenses.</p>
+    <p class="hint" style="margin:-6px 4px 0">Tu as avancé une dépense et on va te la rendre ? Relie le remboursement à la dépense. Quand l'argent arrive, touche « J'ai été remboursé » : la dépense est annulée (en tout ou en partie) dans sa catégorie.</p>
     ${(() => {
-      const pend = state.refunds.filter(r => r.status === 'pending');
-      const done = state.refunds.filter(r => r.status === 'received').slice(-3).reverse();
-      const row = r => `<div class="rec ${r.status === 'received' ? 'done' : ''}">
-        <div class="avatar" style="--c:${r.status === 'received' ? '#2b8a3e' : '#e8a100'};flex-basis:38px;height:38px;font-size:16px">${r.status === 'received' ? '✓' : '↩'}</div>
-        <div class="l"><b>${esc(r.label)}</b><span>${tagHTML(r.categoryId)} <span class="hint">${r.status === 'received' ? 'reçu le ' + new Date(r.receivedDate + 'T12:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : 'avancé le ' + new Date(r.date + 'T12:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}</span></span></div>
-        <span class="amt num">${eur(r.amount)}</span>
+      const fmt = d => new Date(d + 'T12:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+      const withRef = state.transactions.filter(t => t.refund);
+      const pend = withRef.filter(t => t.refund.status === 'pending');
+      const done = withRef.filter(t => t.refund.status === 'received').sort((a, b) => (b.refund.receivedDate || '').localeCompare(a.refund.receivedDate || '')).slice(0, 3);
+      const row = t => `<div class="rec ${t.refund.status === 'received' ? 'done' : ''}">
+        <div class="avatar" style="--c:${t.refund.status === 'received' ? '#2b8a3e' : '#e8a100'};flex-basis:38px;height:38px;font-size:16px">${t.refund.status === 'received' ? '✓' : '↩'}</div>
+        <div class="l"><b>${esc(t.label)}${t.refund.who ? ' · ' + esc(t.refund.who) : ''}</b><span>${tagHTML(t.categoryId)} <span class="hint">payé ${eur(t.amount)} le ${fmt(t.date)}${t.refund.status === 'received' ? ' · remboursé le ' + fmt(t.refund.receivedDate) : ''}</span></span></div>
+        <span class="amt num">${eur(t.refund.amount)}</span>
         <div class="rec-actions">
-          ${r.status === 'pending' ? `<button class="linkbtn" style="background:#2b8a3e;color:#fff" data-refundok="${r.id}">✓ J'ai été remboursé</button>` : ''}
-          <button class="linkbtn danger" data-delrefund="${r.id}">${confirmDel.id === 'ref:' + r.id ? 'Confirmer' : 'Supprimer'}</button>
+          ${t.refund.status === 'pending' ? `<button class="linkbtn" style="background:#2b8a3e;color:#fff" data-txrefok="${t.id}">✓ J'ai été remboursé</button>` : `<button class="linkbtn" data-txrefundo="${t.id}">Annuler</button>`}
+          <button class="linkbtn danger" data-txrefdel="${t.id}">${confirmDel.id === 'tref:' + t.id ? 'Confirmer' : 'Retirer'}</button>
         </div>
       </div>`;
-      return (pend.length || done.length) ? `<div class="list">${pend.map(row).join('')}${done.map(row).join('')}</div>
-        ${pend.length ? `<p class="hint">Total à récupérer : <b class="num">${eur(pendingRefunds())}</b></p>` : ''}`
+      const legacy = (state.refunds || []).filter(r => r.status === 'pending');
+      const lrow = r => `<div class="rec"><div class="avatar" style="--c:#e8a100;flex-basis:38px;height:38px;font-size:16px">↩</div>
+        <div class="l"><b>${esc(r.label)}</b><span>${tagHTML(r.categoryId)}</span></div><span class="amt num">${eur(r.amount)}</span>
+        <div class="rec-actions"><button class="linkbtn" style="background:#2b8a3e;color:#fff" data-refundok="${r.id}">✓ J'ai été remboursé</button><button class="linkbtn danger" data-delrefund="${r.id}">${confirmDel.id === 'ref:' + r.id ? 'Confirmer' : 'Supprimer'}</button></div></div>`;
+      return (pend.length || done.length || legacy.length) ? `<div class="list">${pend.map(row).join('')}${legacy.map(lrow).join('')}${done.map(row).join('')}</div>
+        ${pendingRefunds() > 0 ? `<p class="hint">Total à récupérer : <b class="num">${eur(pendingRefunds())}</b></p>` : ''}`
         : '<p class="hint">Aucun remboursement en attente.</p>';
     })()}
-    <form class="recform" id="addrefund">
-      <label for="ref-label" class="sr-only">Qui doit te rembourser, et pour quoi</label><input id="ref-label" placeholder="Ex. Margot · resto anniv" required>
-      <label for="ref-amount" class="sr-only">Montant à récupérer en euros</label><input id="ref-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="€" required>
-      <div class="row">
-        <select id="ref-cat" aria-label="Catégorie">${state.categories.map(c => `<option value="${c.id}" ${c.id === 'sorties' ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
-        <input id="ref-date" type="date" max="${today()}" value="${today()}" aria-label="Date de la dépense avancée">
-        <button class="btn">Ajouter</button>
-      </div>
-    </form>
+    ${(() => {
+      const lim = new Date(); lim.setDate(lim.getDate() - 90);
+      const cands = state.transactions.filter(t => t.amount > 0 && !t.refund && t.date >= iso(lim)).sort((a, b) => b.date.localeCompare(a.date));
+      if (!cands.length) return '<p class="hint">Note d’abord la dépense dans Saisie, puis relie-lui un remboursement ici (ou coche « On me rembourse » à la saisie).</p>';
+      return `<form class="recform" id="addrefund">
+        <label for="ref-tx" class="sr-only">Dépense concernée</label>
+        <select id="ref-tx" style="grid-column:1/-1">${cands.map(t => `<option value="${t.id}" data-amt="${t.amount}">${esc(t.label)} · ${eur(t.amount)} · ${new Date(t.date + 'T12:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}</option>`).join('')}</select>
+        <label for="ref-who" class="sr-only">Qui te rembourse</label><input id="ref-who" placeholder="Qui ? ex. ton coloc">
+        <label for="ref-amount" class="sr-only">Montant remboursé</label><input id="ref-amount" type="number" inputmode="decimal" min="0" step="0.01" value="${cands[0].amount}" required>
+        <div class="row"><button class="btn">Ajouter le remboursement</button></div>
+      </form>`;
+    })()}
     <div class="sectiontitle">Mon compte</div>
     <div class="mainbud">
       ${window.Cloud && Cloud.user ? `
@@ -805,12 +901,12 @@ function renderJournal() {
   const byDay = {};
   txOfMonth(m).forEach(x => (byDay[x.date] = byDay[x.date] || []).push(x));
   const dailyBudget = Math.max(1, tb / daysIn);
-  const maxDay = Math.max(1, ...Object.values(byDay).map(a => a.reduce((s, x) => s + x.amount, 0)));
+  const maxDay = Math.max(1, ...Object.values(byDay).map(a => a.reduce((s, x) => s + net(x), 0)));
   const first = (new Date(y, mo - 1, 1).getDay() + 6) % 7;
   let cells = ['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(d => `<div class="dow">${d}</div>`).join('');
   for (let i = 0; i < first; i++) cells += '<div></div>';
   for (let d = 1; d <= daysIn; d++) {
-    const k = `${m}-${pad(d)}`, list = byDay[k] || [], sum = list.reduce((s, x) => s + x.amount, 0);
+    const k = `${m}-${pad(d)}`, list = byDay[k] || [], sum = list.reduce((s, x) => s + net(x), 0);
     const cls = ['day', list.length && 'has', k === t && 'today', k > t && 'future', selDay === k && 'sel'].filter(Boolean).join(' ');
     const dayBg = list.length ? `background:${heat(sum / (dailyBudget * 2))};color:${inkOn(sum / (dailyBudget * 2))}` : '';
     cells += `<button class="${cls}" style="${dayBg}" data-day="${k}" aria-label="${d}, ${eur(sum)}"><span>${d}</span><small>${sum ? Math.round(sum) : ''}</small></button>`;
@@ -829,7 +925,7 @@ function renderJournal() {
     <div class="sectiontitle">Jour par jour</div>
     <div class="list">
       ${days.length ? days.map(k => {
-        const list = byDay[k].slice().reverse(), sum = list.reduce((s, x) => s + x.amount, 0);
+        const list = byDay[k].slice().reverse(), sum = list.reduce((s, x) => s + net(x), 0);
         const open = openDays.has(k);
         const label = new Date(k + 'T12:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'short' });
         return `<div class="dayblock ${open ? 'open' : ''}" id="d-${k}">
@@ -841,7 +937,7 @@ function renderJournal() {
           ${open ? list.map(x => `<div class="tx">
             <div class="dotc" style="--c:${colorOf(x.categoryId)}">${esc((cat(x.categoryId)?.name || '?').charAt(0))}</div>
             <div class="l"><span>${esc(x.label)}</span><span>${tagHTML(x.categoryId)}</span></div>
-            <b class="num">${eur(x.amount)}</b>
+            <b class="num">${amtHTML(x)}</b>
             <button class="linkbtn danger" data-deltx="${x.id}">${confirmDel.id === 'tx:' + x.id ? 'Confirmer' : 'Supprimer'}</button>
           </div>`).join('') : ''}
         </div>`;
@@ -903,6 +999,7 @@ document.getElementById('cat-grid').addEventListener('click', e => {
   const b = e.target.closest('[data-pick]'); if (!b) return;
   draft.categoryId = b.dataset.pick; goStep(3);
 });
+document.getElementById('in-refund').addEventListener('change', e => { draft.refund = e.target.checked; renderComposer(); });
 document.getElementById('when').addEventListener('change', e => {
   if (e.target.id !== 'in-date' || !e.target.value) return;
   const v = e.target.value > today() ? today() : e.target.value;
@@ -974,6 +1071,19 @@ document.getElementById('main').addEventListener('click', e => {
     }
     confirmDel.id = 'wipe'; render();
   }
+  if (d.txrefok || d.txrefundo) {
+    const t = state.transactions.find(x => x.id === (d.txrefok || d.txrefundo));
+    if (t && t.refund) {
+      if (d.txrefok) { t.refund.status = 'received'; t.refund.receivedDate = today(); coinRain(12); }
+      else { t.refund.status = 'pending'; delete t.refund.receivedDate; }
+      save(); render();
+    }
+  }
+  if (d.txrefdel) {
+    if (confirmDel.id === 'tref:' + d.txrefdel) { const t = state.transactions.find(x => x.id === d.txrefdel); if (t) delete t.refund; confirmDel.id = null; save(); }
+    else confirmDel.id = 'tref:' + d.txrefdel;
+    render();
+  }
   if (d.refundok) {
     const r = state.refunds.find(x => x.id === d.refundok);
     if (r && r.status === 'pending') {
@@ -1011,6 +1121,7 @@ document.getElementById('main').addEventListener('click', e => {
   }
 });
 document.getElementById('main').addEventListener('change', e => {
+  if (e.target.id === 'ref-tx') { const o = e.target.selectedOptions[0]; if (o) document.getElementById('ref-amount').value = o.dataset.amt; }
   const d = e.target.dataset;
   if (d.main) { state.mainBudget = Math.max(0, parseFloat(e.target.value) || 0); save(); render(); }
   if (d.budget) { cat(d.budget).budget = Math.max(0, parseFloat(e.target.value) || 0); save(); render(); }
@@ -1019,11 +1130,10 @@ document.getElementById('main').addEventListener('change', e => {
 document.getElementById('main').addEventListener('submit', e => {
   if (e.target.id === 'addrefund') {
     e.preventDefault();
-    const label = document.getElementById('ref-label').value.trim();
+    const t = state.transactions.find(x => x.id === document.getElementById('ref-tx').value);
     const amount = parseFloat(String(document.getElementById('ref-amount').value).replace(',', '.'));
-    if (!label || !(amount > 0)) return;
-    const dv = document.getElementById('ref-date').value || today();
-    state.refunds.push({ id: uid(), label: label.charAt(0).toUpperCase() + label.slice(1), amount: Math.round(amount * 100) / 100, categoryId: document.getElementById('ref-cat').value, date: dv > today() ? today() : dv, status: 'pending' });
+    if (!t || !(amount > 0)) return;
+    t.refund = { amount: Math.min(Math.round(amount * 100) / 100, t.amount), who: document.getElementById('ref-who').value.trim(), status: 'pending' };
     save(); render(); return;
   }
   if (e.target.id === 'addrec') {
